@@ -49,4 +49,14 @@ public class BoardService {
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
+    @Transactional
+    public void update(BoardDTO boardDTO) {
+        BoardEntity boardEntity = boardRepository.findById(boardDTO.getId()).orElseThrow(() ->
+                        new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+        if(boardEntity.getBoardPass().equals(boardDTO.getUpdatePass())) {
+            boardEntity.update(boardDTO);
+        } else{
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
 }

@@ -39,4 +39,9 @@ public class BoardEntity extends BaseTimeEntity {
         boardEntity.boardHits = 0;
         return boardEntity;
     }
+
+    public void update(BoardDTO boardDTO) {
+        this.boardWriter = boardDTO.getBoardWriter();
+        this.boardContents = boardDTO.getBoardContents();
+    }
 }

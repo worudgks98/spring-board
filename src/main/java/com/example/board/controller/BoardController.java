@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -49,6 +50,24 @@ public class BoardController {
     public String delete(@PathVariable Long id){
         boardService.delete(id);
         return "redirect:/board/";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable Long id, Model model){
+        BoardDTO boardDTO = boardService.findById(id);
+        model.addAttribute("board", boardDTO);
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String update(BoardDTO boardDTO, RedirectAttributes redirectAttributes){
+        try {
+            boardService.update(boardDTO);
+            return "redirect:/board/" + boardDTO.getId();
+        } catch(IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/board/update/" + boardDTO.getId();
+        }
     }
 
 }
