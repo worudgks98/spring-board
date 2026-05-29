@@ -1,8 +1,12 @@
 package com.example.board.dto;
 
+import com.example.board.entity.BoardEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -14,5 +18,27 @@ public class BoardDTO {
     private String boardTitle;
     private String boardContents;
     private int boardHits;
-    private String boardCreateAt;
+    private String boardCreatedAt;
+
+    private String dateFormat(LocalDateTime date){
+        if(date == null)
+            return null;
+
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public static BoardDTO toBoardDTO(BoardEntity boardEntity) {
+        BoardDTO boardDTO = new BoardDTO();
+        boardDTO.setId(boardEntity.getId());
+        boardDTO.setBoardWriter(boardEntity.getBoardWriter());
+        boardDTO.setBoardTitle(boardEntity.getBoardTitle());
+        boardDTO.setBoardPass(boardEntity.getBoardPass());
+        boardDTO.setBoardContents(boardEntity.getBoardContents());
+        boardDTO.setBoardHits(boardEntity.getBoardHits());
+        boardDTO.setBoardCreatedAt(boardDTO.dateFormat(boardEntity.getCreatedAt()));
+
+        return boardDTO;
+
+
+    }
 }
