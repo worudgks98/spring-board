@@ -6,9 +6,15 @@
 </head>
 <body>
 
-<h3 th:text="${session.loginEmail} + '님 환영합니다.'"></h3>
+<th:block th:if="${session.loginEmail == null}">
+    <a href="/member/login">로그인</a>
+    <a href="/member/save">회원가입</a>
+</th:block>
 
-<a href="/member/logout">로그아웃</a>
+<th:block th:if="${session.loginEmail != null}">
+    <h3 th:text="${session.loginEmail} + '님 환영합니다.'"></h3>
+    <a href="/member/logout">로그아웃</a>
+</th:block>
 
 <table>
     <tr>
@@ -38,6 +44,10 @@
 <script>
     const saveReq = () => {
         location.href = "/board/save";
+    }
+
+    const loginReq = () => {
+        location.href = "/member/login";
     }
 </script>
 

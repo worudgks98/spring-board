@@ -1,5 +1,7 @@
 package com.example.board.controller;
 
+import com.example.board.dto.CommentDTO;
+import com.example.board.service.CommentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import com.example.board.dto.BoardDTO;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping("/save")
     public String saveForm(HttpSession session) {
@@ -60,22 +63,56 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model){
+
         boardService.updateHits(id);
+
         BoardDTO boardDTO = boardService.findById(id);
+
+        List<CommentDTO> commentDTOList =
+                commentService.findAll(id);
+
         model.addAttribute("board", boardDTO);
+        model.addAttribute("commentList", commentDTOList);
+
         return "detail";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id,
+                         HttpSession session){
+
+        BoardDTO boardDTO = boardService.findById(id);
+
+        String loginEmail =
+                (String) session.getAttribute("loginEmail");
+
+        if(loginEmail == null ||
+                !loginEmail.equals(boardDTO.getBoardWriter())){
+            return "redirect:/board/";
+        }
+
         boardService.delete(id);
+
         return "redirect:/board/";
     }
 
     @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, Model model){
+    public String updateForm(@PathVariable Long id,
+                             Model model,
+                             HttpSession session){
+
         BoardDTO boardDTO = boardService.findById(id);
+
+        String loginEmail =
+                (String) session.getAttribute("loginEmail");
+
+        if(loginEmail == null ||
+                !loginEmail.equals(boardDTO.getBoardWriter())){
+            return "redirect:/board/";
+        }
+
         model.addAttribute("board", boardDTO);
+
         return "update";
     }
 

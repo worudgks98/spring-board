@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,4 +47,8 @@ public class BoardEntity extends BaseTimeEntity {
         this.boardWriter = boardDTO.getBoardWriter();
         this.boardContents = boardDTO.getBoardContents();
     }
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE)
+
+    private List<CommentEntity> commentEntitiyList = new ArrayList<>();
 }
