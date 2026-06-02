@@ -44,6 +44,8 @@ public class BoardController {
             return "login";
         }
 
+        boardDTO.setBoardWriter(loginEmail);
+
         boardService.save(boardDTO);
 
         return "redirect:/board/";
