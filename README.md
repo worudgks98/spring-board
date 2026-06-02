@@ -2,115 +2,104 @@
 
 ## 프로젝트 소개
 
-Spring Boot와 MySQL을 활용하여 구현한 게시판 프로젝트입니다.
-게시글 작성, 조회, 수정, 삭제(CRUD) 기능을 구현하였습니다.
+Spring Boot와 JPA를 활용한 게시판 프로젝트입니다.
+
+회원가입 및 로그인 기능을 구현하고, 로그인한 사용자가 게시글을 작성하고 조회할 수 있는 게시판 시스템을 개발하고 있습니다.
 
 ---
 
 ## 개발 환경
 
-* Java 17
-* Spring Boot 3
-* Gradle
-* MySQL
-* JPA
-* Thymeleaf
-* IntelliJ IDEA
+- Java 17
+- Spring Boot 3
+- Spring Data JPA
+- Thymeleaf
+- MySQL
+- Gradle
+- IntelliJ IDEA
 
 ---
 
 ## 주요 기능
 
-### 게시글 작성
+### 회원 기능
 
-* 작성자
-* 비밀번호
-* 제목
-* 내용 입력 가능
+#### 회원가입
 
-### 게시글 목록 조회
+- 이메일
+- 이름
+- 비밀번호 입력
+- 회원 정보 DB 저장
 
-* 전체 게시글 조회
-* 작성일 표시
-* 조회수 표시
+#### 로그인
 
-### 게시글 상세 조회
+- 이메일과 비밀번호 검증
+- 로그인 성공 시 Session 생성
 
-* 게시글 상세 내용 확인
-* 조회수 증가 기능
+#### 로그아웃
 
-### 게시글 수정
-
-* 비밀번호 검증 후 수정 가능
-
-### 게시글 삭제
-
-* 게시글 삭제 기능
+- Session 제거
 
 ---
 
-## 데이터베이스 설정
+### 게시판 기능
 
-`application.yml`
+#### 게시글 작성
 
-```yml
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_codingrecipe
-    username: 사용자명
-    password: 비밀번호
+- 제목
+- 작성자
+- 내용 저장
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-```
+#### 게시글 목록 조회
 
----
+- 전체 게시글 조회
+- 작성일 조회
+- 조회수 조회
 
-## 실행 방법
+#### 게시글 상세 조회
 
-```bash
-./gradlew bootRun
-```
+- 게시글 내용 확인
+- 조회수 증가
 
-실행 후 브라우저에서 접속:
+#### 게시글 수정
 
-```bash
-http://localhost:8080/board/
-```
+- 작성한 게시글 수정
+
+#### 게시글 삭제
+
+- 게시글 삭제
 
 ---
 
 ## 프로젝트 구조
 
-```bash
+```text
 src
  ├─ controller
+ │   ├─ BoardController
+ │   └─ MemberController
+ │
  ├─ service
+ │   ├─ BoardService
+ │   └─ MemberService
+ │
  ├─ repository
+ │   ├─ BoardRepository
+ │   └─ MemberRepository
+ │
  ├─ entity
+ │   ├─ BoardEntity
+ │   └─ MemberEntity
+ │
  ├─ dto
+ │   ├─ BoardDTO
+ │   └─ MemberDTO
+ │
  └─ templates
-```
-
----
-
-## 구현 화면
-
-* 게시글 목록
-* 게시글 상세조회
-* 게시글 작성
-* 게시글 수정
-
----
-
-## 학습 내용
-
-* Spring Boot MVC 패턴
-* JPA Entity 활용
-* DTO 변환
-* Thymeleaf 템플릿 엔진
-* MySQL 연동
-* Git & GitHub 사용
+     ├─ index.html
+     ├─ save.html
+     ├─ detail.html
+     ├─ update.html
+     ├─ list.html
+     ├─ memberSave.html
+     └─ login.html
