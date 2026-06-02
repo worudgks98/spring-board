@@ -31,7 +31,9 @@
     </tr>
 </table>
 
-<button onclick="saveReq()">글작성</button>
+<th:block th:if="${session.loginEmail != null}">
+    <button onclick="saveReq()">글작성</button>
+</th:block>
 
 <script>
     const saveReq = () => {

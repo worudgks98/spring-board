@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
@@ -20,14 +21,31 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/save")
-    public String saveForm(){
+    public String saveForm(HttpSession session) {
+
+        String loginEmail =
+                (String) session.getAttribute("loginEmail");
+
+        if(loginEmail == null){
+            return "login";
+        }
+
         return "save";
     }
 
     @PostMapping("/save")
-    public String save(BoardDTO boardDTO){
-        System.out.println("boardDTO = " + boardDTO);
+    public String save(BoardDTO boardDTO,
+                       HttpSession session){
+
+        String loginEmail =
+                (String) session.getAttribute("loginEmail");
+
+        if(loginEmail == null){
+            return "login";
+        }
+
         boardService.save(boardDTO);
+
         return "redirect:/board/";
     }
 
