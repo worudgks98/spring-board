@@ -83,21 +83,36 @@
 </script>
 <hr>
 
+<hr>
+
 <h3>댓글 목록</h3>
 
-<table>
-    <tr>
-        <th>번호</th>
-        <th>작성자</th>
-        <th>내용</th>
-    </tr>
+<div th:each="comment : ${commentList}"
+     class="comment-box">
 
-    <tr th:each="comment : ${commentList}">
-        <td th:text="${comment.id}"></td>
-        <td th:text="${comment.commentWriter}"></td>
-        <td th:text="${comment.commentContents}"></td>
-    </tr>
-</table>
+    <div class="comment-header">
+
+        <span class="comment-writer"
+              th:text="${comment.commentWriter}">
+        </span>
+
+        <span th:if="${session.loginEmail == comment.commentWriter}">
+            <a th:href="@{/comment/update/{id}(id=${comment.id})}">
+                수정
+            </a>
+            |
+            <a th:href="@{/comment/delete/{id}(id=${comment.id})}">
+                삭제
+            </a>
+        </span>
+
+    </div>
+
+    <div class="comment-content"
+         th:text="${comment.commentContents}">
+    </div>
+
+</div>
 
 </body>
 </html>

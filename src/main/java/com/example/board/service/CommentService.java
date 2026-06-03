@@ -50,4 +50,24 @@ public class CommentService {
 
         return commentDTOList;
     }
+
+    public CommentDTO findById(Long id){
+
+        CommentEntity commentEntity = commentRepository.findById(id).get();
+
+        return CommentDTO.toCommentDTO((commentEntity));
+    }
+
+    public void delete(Long id){
+        commentRepository.deleteById(id);
+    }
+
+    public void update(CommentDTO commentDTO){
+
+        CommentEntity commentEntity = commentRepository.findById(commentDTO.getId()).get();
+
+        commentEntity.setCommentContents((commentDTO.getCommentContents()));
+
+        commentRepository.save(commentEntity);
+    }
 }

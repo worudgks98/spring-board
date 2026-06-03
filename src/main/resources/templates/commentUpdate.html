@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>댓글수정</title>
+</head>
+<body>
+
+<form action="/comment/update" method="post">
+
+    <input type="hidden"
+           name="id"
+           th:value="${comment.id}">
+
+    <input type="hidden"
+           name="boardId"
+           th:value="${comment.boardId}">
+
+    <textarea name="commentContents"
+              th:text="${comment.commentContents}">
+    </textarea>
+
+    <br>
+
+    <input type="submit" value="수정">
+
+</form>
+
+</body>
+</html>
