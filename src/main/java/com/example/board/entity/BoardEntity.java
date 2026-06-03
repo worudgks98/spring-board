@@ -22,9 +22,6 @@ public class BoardEntity extends BaseTimeEntity {
     private String boardWriter;
 
     @Column
-    private String boardPass;
-
-    @Column
     private String boardTitle;
 
     @Column
@@ -36,7 +33,6 @@ public class BoardEntity extends BaseTimeEntity {
     public static BoardEntity toSaveEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.boardWriter = boardDTO.getBoardWriter();
-        boardEntity.boardPass = boardDTO.getBoardPass();
         boardEntity.boardTitle = boardDTO.getBoardTitle();
         boardEntity.boardContents = boardDTO.getBoardContents();
         boardEntity.boardHits = 0;

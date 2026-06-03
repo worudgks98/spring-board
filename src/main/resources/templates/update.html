@@ -10,7 +10,6 @@
 <form action="/board/update" method="post" name="updateForm">
     <input type="hidden" name="id" th:value="${board.id}">
     writer: <input type="text" name="boardWriter" th:value="${board.boardWriter}" readonly> <br>
-    pass: <input type="text" name="updatePass"> <br>
     <input type="hidden" name="boardPass" th:value="${board.boardPass}">
     title: <input type="text" name="boardTitle" th:value="${board.boardTitle}"> <br>
     contents: <textarea name="boardContents" cols="30" rows="10" th:text="${board.boardContents}"></textarea> <br>

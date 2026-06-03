@@ -30,6 +30,39 @@ public class BoardService {
         return boardDTOList;
     }
 
+    public List<BoardDTO> search(String searchType,
+                                 String keyword){
+
+        List<BoardEntity> boardEntityList;
+
+        if(searchType.equals("title")){
+            boardEntityList =
+                    boardRepository.findByBoardTitleContaining(keyword);
+
+        }else if(searchType.equals("writer")){
+            boardEntityList =
+                    boardRepository.findByBoardWriterContaining(keyword);
+
+        }else if(searchType.equals("contents")){
+            boardEntityList =
+                    boardRepository.findByBoardContentsContaining(keyword);
+
+        }else{
+            boardEntityList =
+                    boardRepository
+                            .findByBoardTitleContainingOrBoardContentsContaining(
+                                    keyword, keyword);
+        }
+
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+
+        for(BoardEntity boardEntity : boardEntityList){
+            boardDTOList.add(BoardDTO.toBoardDTO(boardEntity));
+        }
+
+        return boardDTOList;
+    }
+
     @Transactional
     public void updateHits(Long id) {
         boardRepository.updateHits(id);
@@ -49,14 +82,15 @@ public class BoardService {
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
+
     @Transactional
     public void update(BoardDTO boardDTO) {
-        BoardEntity boardEntity = boardRepository.findById(boardDTO.getId()).orElseThrow(() ->
-                        new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
-        if(boardEntity.getBoardPass().equals(boardDTO.getUpdatePass())) {
-            boardEntity.update(boardDTO);
-        } else{
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
+
+        BoardEntity boardEntity =
+                boardRepository.findById(boardDTO.getId())
+                        .orElseThrow(() ->
+                                new IllegalArgumentException("해당 게시글을 찾을 수 없습니다."));
+
+        boardEntity.update(boardDTO);
     }
 }

@@ -127,4 +127,17 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/search")
+    public String search(String searchType,String keyword,
+                         Model model){
+
+        List<BoardDTO> boardDTOList =
+                boardService.search(searchType,keyword);
+
+        model.addAttribute("boardList",
+                boardDTOList);
+
+        return "list";
+    }
+
 }
