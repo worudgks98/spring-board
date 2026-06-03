@@ -6,6 +6,9 @@ import com.example.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,37 +33,48 @@ public class BoardService {
         return boardDTOList;
     }
 
-    public List<BoardDTO> search(String searchType,
-                                 String keyword){
+    public Page<BoardDTO> paging(int page){
 
-        List<BoardEntity> boardEntityList;
+        Pageable pageable =
+                PageRequest.of(page - 1, 5);
+
+        Page<BoardEntity> boardEntities =
+                boardRepository.findAll(pageable);
+
+        return boardEntities.map(BoardDTO::toBoardDTO);
+    }
+
+    public Page<BoardDTO> search(String searchType,
+                                 String keyword,
+                                 Pageable pageable){
+
+        Page<BoardEntity> boardEntities;
 
         if(searchType.equals("title")){
-            boardEntityList =
-                    boardRepository.findByBoardTitleContaining(keyword);
+            boardEntities =
+                    boardRepository.findByBoardTitleContaining(
+                            keyword, pageable);
 
         }else if(searchType.equals("writer")){
-            boardEntityList =
-                    boardRepository.findByBoardWriterContaining(keyword);
+            boardEntities =
+                    boardRepository.findByBoardWriterContaining(
+                            keyword, pageable);
 
         }else if(searchType.equals("contents")){
-            boardEntityList =
-                    boardRepository.findByBoardContentsContaining(keyword);
+            boardEntities =
+                    boardRepository.findByBoardContentsContaining(
+                            keyword, pageable);
 
         }else{
-            boardEntityList =
+            boardEntities =
                     boardRepository
                             .findByBoardTitleContainingOrBoardContentsContaining(
-                                    keyword, keyword);
+                                    keyword,
+                                    keyword,
+                                    pageable);
         }
 
-        List<BoardDTO> boardDTOList = new ArrayList<>();
-
-        for(BoardEntity boardEntity : boardEntityList){
-            boardDTOList.add(BoardDTO.toBoardDTO(boardEntity));
-        }
-
-        return boardDTOList;
+        return boardEntities.map(BoardDTO::toBoardDTO);
     }
 
     @Transactional

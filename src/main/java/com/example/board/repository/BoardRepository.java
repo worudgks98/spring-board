@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,14 +16,21 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     @Query(value = "update BoardEntity b set b.boardHits = b.boardHits + 1 where b.id = :id")
     void updateHits(@Param("id") Long id);
 
-    List<BoardEntity> findByBoardTitleContaining(String keyword);
+    Page<BoardEntity> findByBoardTitleContaining(
+            String keyword,
+            Pageable pageable);
 
-    List<BoardEntity> findByBoardWriterContaining(String keyword);
+    Page<BoardEntity> findByBoardWriterContaining(
+            String keyword,
+            Pageable pageable);
 
-    List<BoardEntity> findByBoardContentsContaining(String keyword);
+    Page<BoardEntity> findByBoardContentsContaining(
+            String keyword,
+            Pageable pageable);
 
-    List<BoardEntity>
+    Page<BoardEntity>
     findByBoardTitleContainingOrBoardContentsContaining(
             String titleKeyword,
-            String contentsKeyword);
+            String contentsKeyword,
+            Pageable pageable);
 }

@@ -3,15 +3,16 @@ package com.example.board.controller;
 import com.example.board.dto.CommentDTO;
 import com.example.board.service.CommentService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -55,9 +56,15 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model){
-        List<BoardDTO> boardDTOList = boardService.findAll();
-        model.addAttribute("boardList", boardDTOList);
+    public String paging(
+            @PageableDefault(page = 1) Pageable pageable,
+            Model model){
+
+        Page<BoardDTO> boardList =
+                boardService.paging(pageable.getPageNumber());
+
+        model.addAttribute("boardList", boardList);
+
         return "list";
     }
 
@@ -128,14 +135,25 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public String search(String searchType,String keyword,
-                         Model model){
+    public String search(
+            String searchType,
+            String keyword,
+            @RequestParam(value = "page", defaultValue = "1")
+            int page,
+            Model model){
 
-        List<BoardDTO> boardDTOList =
-                boardService.search(searchType,keyword);
+        Pageable pageable =
+                PageRequest.of(page - 1, 5);
 
-        model.addAttribute("boardList",
-                boardDTOList);
+        Page<BoardDTO> boardList =
+                boardService.search(
+                        searchType,
+                        keyword,
+                        pageable);
+
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("keyword", keyword);
 
         return "list";
     }

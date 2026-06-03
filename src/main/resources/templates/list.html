@@ -45,7 +45,7 @@
         <th>hits</th>
     </tr>
 
-    <tr th:each="board : ${boardList}">
+    <tr th:each="board : ${boardList.content}">
         <td th:text="${board.id}"></td>
         <td>
             <a th:href="@{|/board/${board.id}|}"
@@ -56,6 +56,63 @@
         <td th:text="${board.boardHits}"></td>
     </tr>
 </table>
+
+<hr>
+
+<div th:if="${keyword == null}">
+
+    <span th:if="${boardList.hasPrevious()}">
+        <a th:href="@{/board/(page=${boardList.number})}">
+            이전
+        </a>
+    </span>
+
+    <span th:each="i : ${#numbers.sequence(1, boardList.totalPages)}">
+        <a th:href="@{/board/(page=${i})}"
+           th:text="${i}">
+        </a>
+    </span>
+
+    <span th:if="${boardList.hasNext()}">
+        <a th:href="@{/board/(page=${boardList.number+2})}">
+            다음
+        </a>
+    </span>
+
+</div>
+
+<div th:if="${keyword != null}">
+
+    <span th:if="${boardList.hasPrevious()}">
+        <a th:href="@{/board/search(
+                page=${boardList.number},
+                searchType=${searchType},
+                keyword=${keyword})}">
+            이전
+        </a>
+    </span>
+
+    <span th:each="i : ${#numbers.sequence(1, boardList.totalPages)}">
+
+        <a th:href="@{/board/search(
+                page=${i},
+                searchType=${searchType},
+                keyword=${keyword})}"
+           th:text="${i}">
+        </a>
+
+    </span>
+
+    <span th:if="${boardList.hasNext()}">
+        <a th:href="@{/board/search(
+                page=${boardList.number+2},
+                searchType=${searchType},
+                keyword=${keyword})}">
+            다음
+        </a>
+    </span>
+
+</div>
 
 <th:block th:if="${session.loginEmail != null}">
     <button onclick="saveReq()">글작성</button>
